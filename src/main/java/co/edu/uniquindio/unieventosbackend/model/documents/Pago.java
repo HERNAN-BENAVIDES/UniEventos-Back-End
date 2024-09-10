@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@SuppressWarnings("ALL")
 public class Pago {
     private String idPago;
     private String idOrdenCompra;

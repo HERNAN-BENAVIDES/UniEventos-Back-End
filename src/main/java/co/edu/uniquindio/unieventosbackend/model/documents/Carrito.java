@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@SuppressWarnings("ALL")
 public class Carrito {
     private String id;
     private Double total;

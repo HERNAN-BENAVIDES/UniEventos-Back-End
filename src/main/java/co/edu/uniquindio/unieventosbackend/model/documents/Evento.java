@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
+@SuppressWarnings("ALL")
 public class Evento {
     private String nombre;
     private String descripcion;

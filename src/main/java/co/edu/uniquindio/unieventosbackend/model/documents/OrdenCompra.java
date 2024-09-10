@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@SuppressWarnings("ALL")
 public class OrdenCompra {
     private String id;
     private String codigo;

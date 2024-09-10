@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
+@SuppressWarnings("ALL")
 public class Administrador {
     private String cedula;
     private String nombre;

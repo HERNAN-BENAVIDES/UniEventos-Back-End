@@ -9,6 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Builder
+@SuppressWarnings("ALL")
 public class Cupon {
     private String id;
     private String codigo;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@SuppressWarnings("ALL")
 public class Boleto {
     private Cliente cliente;
     private String qr;

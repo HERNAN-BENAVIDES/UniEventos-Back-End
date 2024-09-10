@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Builder
+@SuppressWarnings("ALL")
 public class Item {
     private String id;
     private Integer unidades;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@SuppressWarnings("ALL")
 public class Localidad {
     private String nombre;
     private String descripcion;

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Builder
+@SuppressWarnings("ALL")
 public class Direccion {
     private String departamento;
     private String ciudad;
