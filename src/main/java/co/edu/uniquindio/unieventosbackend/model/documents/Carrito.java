@@ -11,14 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @SuppressWarnings("ALL")
 public class Carrito {
-    private String id;
     private Double total;
     private Date fechaCreacion;
     private List<Item> listaItems;
 
     @Builder
     public Carrito(String id, Double total, Date fechaCreacion, List<Item> listaItems) {
-        this.id = id;
         this.total = total;
         this.fechaCreacion = fechaCreacion;
         this.listaItems = listaItems;

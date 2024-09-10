@@ -3,11 +3,17 @@ package co.edu.uniquindio.unieventosbackend.model.documents;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
 @Data
 @SuppressWarnings("ALL")
+@Document(collection = "clientes")
 public class Cliente {
+    @Id
+    private ObjectId id;
     private String cedula;
     private String nombre;
     private String apellido;
