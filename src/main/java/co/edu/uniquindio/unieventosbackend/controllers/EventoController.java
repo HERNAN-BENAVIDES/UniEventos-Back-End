@@ -6,6 +6,7 @@ import co.edu.uniquindio.unieventosbackend.services.EventoService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,4 +38,13 @@ public class EventoController {
           return ResponseEntity.ok(evento);
      }
 
+     @DeleteMapping("/eliminar/{id}")
+     @Transactional
+     public ResponseEntity<?> eliminarEvento(@PathVariable String id){
+          Evento evento = (Evento) eventoService.eliminarEvento(id);
+          if(evento == null){
+               return ResponseEntity.badRequest().build();
+          }
+          return ResponseEntity.ok().build();
+     }
 }

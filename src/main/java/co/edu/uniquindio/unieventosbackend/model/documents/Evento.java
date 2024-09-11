@@ -27,6 +27,7 @@ public class Evento {
     private Date fecha;
     private Direccion direccion;
     private List<Localidad> listaLocalidades;
+    private Boolean isActivo;
 
     @Builder
     public Evento(String nombre, String descripcion, String poster, String imgLocalidades, Date fecha, Direccion direccion, List<Localidad> listaLocalidades) {
@@ -37,6 +38,7 @@ public class Evento {
         this.fecha = fecha;
         this.direccion = direccion;
         this.listaLocalidades = listaLocalidades;
+        this.isActivo = true;
     }
 
     public Evento(CrearEventoDTO evento) {
@@ -47,9 +49,14 @@ public class Evento {
             this.fecha = evento.fecha();
             this.direccion = new Direccion(evento.direccion());
             this.listaLocalidades = casteoLocalidades(evento.listaLocalidades());
+            this.isActivo = true;
     }
 
     private List<Localidad> casteoLocalidades(List<CrearLocalidadDTO> localidadesDTOS) {
             return localidadesDTOS.stream().map(Localidad::new).toList();
     }
+
+     public void desactivar() {
+         this.isActivo = false;
+     }
 }

@@ -26,4 +26,14 @@ public class EventoService {
      public Evento findById(String id) {
           return eventoRepository.findById(id).orElse(null);
      }
+
+     public Object eliminarEvento(String id) {
+          Optional<Evento> evento = eventoRepository.findById(id);
+          if (evento.isPresent()){
+               evento.get().desactivar();
+               eventoRepository.save(evento.get());
+               return evento.get();
+          }
+          return  null;
+     }
 }
