@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unieventosbackend.model.documents;
 
+import co.edu.uniquindio.unieventosbackend.dto.localidad.CrearLocalidadDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,11 @@ public class Localidad {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.capacidadMaxima = capacidadMaxima;
+    }
+
+    public Localidad(CrearLocalidadDTO localidadDTO) {
+            this.nombre = localidadDTO.nombre();
+            this.descripcion = localidadDTO.descripcion();
+            this.capacidadMaxima = localidadDTO.capacidadMaxima();
     }
 }

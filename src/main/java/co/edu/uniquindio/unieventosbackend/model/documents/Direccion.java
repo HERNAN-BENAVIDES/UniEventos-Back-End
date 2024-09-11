@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unieventosbackend.model.documents;
 
+import co.edu.uniquindio.unieventosbackend.dto.direccion.CrearDireccionDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,13 @@ public class Direccion {
         this.barrio = barrio;
         this.calle = calle;
         this.numResidencia = numResidencia;
+    }
+
+    public Direccion(CrearDireccionDTO direccion) {
+            this.departamento = direccion.departamento();
+            this.ciudad = direccion.ciudad();
+            this.barrio = direccion.barrio();
+            this.calle = direccion.calle();
+            this.numResidencia = direccion.numResidencia();
     }
 }

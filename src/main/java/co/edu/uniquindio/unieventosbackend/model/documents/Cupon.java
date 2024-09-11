@@ -11,7 +11,6 @@ import java.util.Date;
 
 @NoArgsConstructor
 @Data
-@Builder
 @SuppressWarnings("ALL")
 @Document(collection = "cupones")
 public class Cupon {
@@ -22,6 +21,7 @@ public class Cupon {
     private Double porcentajeDescuento;
     private Date fechaVencimiento;
 
+    @Builder
     public Cupon(String codigo, String nombre, Double porcentajeDescuento, Date fechaVencimiento) {
         this.codigo = codigo;
         this.nombre = nombre;
