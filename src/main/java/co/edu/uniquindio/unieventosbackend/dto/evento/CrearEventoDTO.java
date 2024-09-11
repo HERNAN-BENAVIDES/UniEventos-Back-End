@@ -2,8 +2,6 @@ package co.edu.uniquindio.unieventosbackend.dto.evento;
 
 import co.edu.uniquindio.unieventosbackend.dto.direccion.CrearDireccionDTO;
 import co.edu.uniquindio.unieventosbackend.dto.localidad.CrearLocalidadDTO;
-import co.edu.uniquindio.unieventosbackend.model.documents.Direccion;
-import co.edu.uniquindio.unieventosbackend.model.documents.Localidad;
 
 import java.util.Date;
 import java.util.List;

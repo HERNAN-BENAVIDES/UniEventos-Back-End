@@ -6,10 +6,7 @@ import co.edu.uniquindio.unieventosbackend.services.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/unieventos/eventos")
@@ -21,6 +18,11 @@ public class EventoController {
      @PostMapping("/crear")
      public ResponseEntity<?> crearEvento(@Validated @RequestBody CrearEventoDTO evento) {
           return ResponseEntity.ok(eventoService.crearEvento(new Evento(evento)));
+     }
+
+     @GetMapping("/eventos-disponibles")
+     public ResponseEntity<?> obtenerEventosDisponibles() {
+          return ResponseEntity.ok(eventoService.obtenerEventosDisponibles());
      }
 
 }
