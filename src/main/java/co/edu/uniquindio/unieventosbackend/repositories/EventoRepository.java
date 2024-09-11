@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Date;
 import java.util.List;
 
-public interface EventoRepository extends MongoRepository<Evento, ObjectId> {
+public interface EventoRepository extends MongoRepository<Evento, String> {
      Evento save(Evento evento);
 
      List<Evento> findByFechaGreaterThanEqual(Date fecha);

@@ -19,7 +19,7 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public class Evento {
     @Id
-     private ObjectId id;
+     private String id;
     private String nombre;
     private String descripcion;
     private String poster;
