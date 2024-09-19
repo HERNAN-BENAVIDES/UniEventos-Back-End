@@ -2,7 +2,6 @@ package co.edu.uniquindio.unieventosbackend.services;
 
 import co.edu.uniquindio.unieventosbackend.model.documents.Evento;
 import co.edu.uniquindio.unieventosbackend.repositories.EventoRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
