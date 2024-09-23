@@ -10,4 +10,11 @@ public interface EventoRepository extends MongoRepository<Evento, String> {
 
      List<Evento> findByFechaGreaterThanEqual(Date fecha);
 
+     List<Evento> findByNombreContaining(String nombre);
+
+     List<Evento> findByFechaGreaterThanEqualAndNombreContaining(Date fecha, String nombre);
+
+     List<Evento> findByNombreContainingAndFechaGreaterThanEqual(String nombre, Date fecha);
+
+     List<Evento> findByDireccionCiudad(String ciudad);
 }

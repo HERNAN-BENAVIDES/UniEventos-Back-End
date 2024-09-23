@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,11 +15,11 @@ public class EventoService {
      @Autowired
      private EventoRepository eventoRepository;
 
-     public Object crearEvento(Evento evento) {
+     public Evento crearEvento(Evento evento) {
           return eventoRepository.save(evento);
      }
 
-     public Object obtenerEventosDisponibles() {
+     public List<Evento> obtenerEventosDisponibles() {
           return eventoRepository.findByFechaGreaterThanEqual(new Date());
      }
 
@@ -26,7 +27,7 @@ public class EventoService {
           return eventoRepository.findById(id).orElse(null);
      }
 
-     public Object eliminarEvento(String id) {
+     public Evento eliminarEvento(String id) {
           Optional<Evento> evento = eventoRepository.findById(id);
           if (evento.isPresent()){
                evento.get().desactivar();
@@ -35,4 +36,57 @@ public class EventoService {
           }
           return  null;
      }
+
+     public Evento eliminarEvento(Evento evento) {
+          evento.desactivar();
+          return eventoRepository.save(evento);
+     }
+
+     public Evento actualizarEvento(Evento evento) {
+          return eventoRepository.save(evento);
+     }
+
+     public Evento desactivarEvento(String id) {
+          Optional<Evento> evento = eventoRepository.findById(id);
+          if (evento.isPresent()){
+               evento.get().desactivar();
+               eventoRepository.save(evento.get());
+               return evento.get();
+          }
+          return  null;
+     }
+
+     public Evento activarEvento(String id) {
+          Optional<Evento> evento = eventoRepository.findById(id);
+          if (evento.isPresent()){
+               evento.get().setIsActivo(true);
+               eventoRepository.save(evento.get());
+               return evento.get();
+          }
+          return  null;
+     }
+
+     public List<Evento> obtenerEventos() {
+          return eventoRepository.findAll();
+     }
+
+     public List<Evento> obtenerEventosPorNombre(String nombre) {
+          return eventoRepository.findByNombreContaining(nombre);
+     }
+
+     public List<Evento> obtenerEventosPorFecha(Date fecha) {
+          return eventoRepository.findByFechaGreaterThanEqual(fecha);
+     }
+     public List<Evento> obtenerEventosPorFechaYNombre(Date fecha, String nombre) {
+          return eventoRepository.findByFechaGreaterThanEqualAndNombreContaining(fecha, nombre);
+     }
+
+     public List<Evento> obtenerEventosPorNombreYFecha(String nombre, Date fecha) {
+          return eventoRepository.findByNombreContainingAndFechaGreaterThanEqual(nombre, fecha);
+     }
+
+     public List<Evento> obtenerEventosPorCiudad(String ciudad) {
+          return eventoRepository.findByDireccionCiudad(ciudad);
+     }
+
 }
