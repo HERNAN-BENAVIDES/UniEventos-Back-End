@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "administradores")
 public class Administrador {
     @Id
-    private ObjectId id;
+    private String id;
     private String cedula;
     private String nombre;
     private String apellido;

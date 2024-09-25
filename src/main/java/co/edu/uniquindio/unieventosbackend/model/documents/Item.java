@@ -6,14 +6,18 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@Builder
 @SuppressWarnings("ALL")
 public class Item {
-    private String id;
+    private String idEvento;
+    private Localidad localidad;
     private Integer unidades;
+    private Double subtotal;
 
-    public Item(String id, Integer unidades) {
-        this.id = id;
+    @Builder
+    public Item(String idEvento, Localidad localidad, Integer unidades) {
+        this.idEvento = idEvento;
+        this.localidad = localidad;
         this.unidades = unidades;
+        this.subtotal = localidad.getPrecio() * unidades;
     }
 }
