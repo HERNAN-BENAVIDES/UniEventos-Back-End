@@ -1,14 +1,18 @@
 package co.edu.uniquindio.unieventosbackend.controllers;
 
+import co.edu.uniquindio.unieventosbackend.dto.EventoListarDTO;
 import co.edu.uniquindio.unieventosbackend.dto.evento.CrearEventoDTO;
 import co.edu.uniquindio.unieventosbackend.model.documents.Evento;
 import co.edu.uniquindio.unieventosbackend.services.EventoService;
-import org.bson.types.ObjectId;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.Optional;
 
@@ -19,14 +23,15 @@ public class EventoController {
      @Autowired
      private EventoService eventoService;
 
+
      @PostMapping("/crear")
-     public ResponseEntity<?> crearEvento(@Validated @RequestBody CrearEventoDTO evento) {
+     public ResponseEntity<?> crearEvento(@Valid @RequestBody CrearEventoDTO evento) {
           return ResponseEntity.ok(eventoService.crearEvento(new Evento(evento)));
      }
 
      @GetMapping("/eventos-disponibles")
-     public ResponseEntity<?> obtenerEventosDisponibles() {
-          return ResponseEntity.ok(eventoService.obtenerEventosDisponibles());
+     public ResponseEntity<Page<EventoListarDTO>> obtenerEventosDisponibles(@PageableDefault(size =5) Pageable pageable) {
+          return ResponseEntity.ok(eventoService.obtenerEventosDisponibles(pageable).map(EventoListarDTO::new));
      }
 
      @GetMapping("/eventos-disponibles/{id}")
@@ -41,8 +46,8 @@ public class EventoController {
      @DeleteMapping("/eliminar/{id}")
      @Transactional
      public ResponseEntity<?> eliminarEvento(@PathVariable String id){
-          Evento evento = (Evento) eventoService.eliminarEvento(id);
-          if(evento == null){
+          Evento evento = eventoService.eliminarEvento(id);
+          if(evento.getIsActivo()){
                return ResponseEntity.badRequest().build();
           }
           return ResponseEntity.ok().build();

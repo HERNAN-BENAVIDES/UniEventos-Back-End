@@ -59,4 +59,6 @@ public class Evento {
      public void desactivar() {
          this.isActivo = false;
      }
+
+
 }
