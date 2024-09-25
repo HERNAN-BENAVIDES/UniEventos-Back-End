@@ -1,12 +1,13 @@
 package co.edu.uniquindio.unieventosbackend.model.documents;
 
+import co.edu.uniquindio.unieventosbackend.dto.usuario.UsuarioRegistroDto;
 import co.edu.uniquindio.unieventosbackend.model.enums.EstadoCuenta;
 import co.edu.uniquindio.unieventosbackend.model.enums.Rol;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,33 +27,40 @@ public class Usuario implements UserDetails {
     @Id
     private String id;
     @EqualsAndHashCode.Include
-    private String correoElectronico;
-    private String contrasenia;
+    private String username;
+    private String password;
     private Rol rol;
     private EstadoCuenta estadoCuenta;
 
     @Builder
-    public Usuario(String correo, String contrasenia, Rol rol, EstadoCuenta estadoCuenta) {
-        this.correoElectronico = correo;
-        this.contrasenia = contrasenia;
-        this.rol = rol;
-        this.estadoCuenta = estadoCuenta;
+    public Usuario(String correo, String contrasenia) {
+        this.username = correo;
+        this.password = contrasenia;
+        this.rol = Rol.CLIENTE;
+        this.estadoCuenta = EstadoCuenta.ACTIVA;
+    }
+
+    public Usuario(UsuarioRegistroDto usuario) {
+            this.username = usuario.username();
+            this.password = usuario.password();
+            this.rol = Rol.CLIENTE;
+            this.estadoCuenta = EstadoCuenta.ACTIVA;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rol));
     }
 
     @Override
     public String getPassword() {
-        return this.contrasenia;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.correoElectronico;
+        return username;
     }
 
     @Override
