@@ -34,8 +34,12 @@ public class SecurityConfig {
                   .csrf(csrf -> csrf.disable())
                   .cors(cors -> cors.disable())
                   .authorizeHttpRequests(auth -> auth
-                          .requestMatchers("/auth/login").permitAll() // Permitir acceso al login
+                          .requestMatchers("/uni-eventos/auth/login").permitAll() // Permitir acceso al login
+                          .requestMatchers("/uni-eventos/auth/logout").authenticated() // Solo usuarios autenticados pueden cerrar sesión
+                          .requestMatchers("/uni-eventos/auth/register").permitAll() // Permitir acceso al registro
+                          .requestMatchers("/uni-eventos/eventos/crear").hasRole("ADMINISTRADOR")
                           .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
+                          .requestMatchers("/cliente/cuenta/**").authenticated()
                           .anyRequest().permitAll()
                   )
                   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

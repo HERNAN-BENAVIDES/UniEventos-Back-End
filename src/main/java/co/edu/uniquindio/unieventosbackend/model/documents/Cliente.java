@@ -23,7 +23,7 @@ public class Cliente {
     private String apellido;
     private String telefono;
     private Usuario usuario;
-    private Carrito Carrito;
+    private Carrito carrito;
     private List<String> idOrdenesCompra;
 
     @Builder
@@ -33,7 +33,7 @@ public class Cliente {
         this.apellido = apellido;
         this.telefono = telefono;
         this.usuario = usuario;
-        this.Carrito = new Carrito();
+        this.carrito = new Carrito();
         this.idOrdenesCompra = new ArrayList<>();
     }
 
@@ -43,7 +43,7 @@ public class Cliente {
             this.apellido = clienteRegistroDto.apellido();
             this.telefono = clienteRegistroDto.telefono();
             this.usuario = new Usuario(clienteRegistroDto.usuario());
-            this.Carrito = new Carrito();
+            this.carrito = new Carrito();
             this.idOrdenesCompra = new ArrayList<>();
     }
 }

@@ -16,18 +16,16 @@ public class ClienteService {
 
      @Autowired
      private UsuarioService usuarioService;
-     @Autowired
-     private UsuarioRepository usuarioRepository;
+
 
 
      public Cliente crearUsuario(Cliente cliente) throws UsuarioExistenteException {
           Usuario usuario = cliente.getUsuario();
           Boolean user = usuarioService.findByUsuario(usuario);
           if (user) {
-               System.out.println("El usuario ya existe");
                throw new UsuarioExistenteException("El usuario ya existe");
           }
-          usuarioRepository.save(usuario);
+          usuarioService.saveUsuario(usuario);
           return clienteRepository.save(cliente);
      }
 }

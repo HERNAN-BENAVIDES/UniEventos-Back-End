@@ -48,8 +48,11 @@ public class JwtUtil {
      }
 
      private String createToken(Map<String, Object> claims, String subject) {
-          return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                  .setExpiration(new Date(System.currentTimeMillis() + expiration))
+          return Jwts.builder()
+                  .setClaims(claims)
+                  .setSubject(subject)
+                  .setIssuedAt(new Date(System.currentTimeMillis()))
+                  .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000)) // Convertir a milisegundos
                   .signWith(SignatureAlgorithm.HS256, secret).compact();
      }
 
