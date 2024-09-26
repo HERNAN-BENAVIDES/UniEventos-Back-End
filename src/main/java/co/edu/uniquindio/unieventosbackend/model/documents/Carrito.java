@@ -15,6 +15,7 @@ public class Carrito {
 
     @Builder
     public Carrito() {
+        this.total = 0.0;
         this.listaItems = new ArrayList<>();
     }
 

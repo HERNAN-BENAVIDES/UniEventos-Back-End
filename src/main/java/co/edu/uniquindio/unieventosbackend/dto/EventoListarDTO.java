@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public record EventoListarDTO(
+        String id,
         String nombre,
         String descripcion,
         String poster,
@@ -16,7 +17,7 @@ public record EventoListarDTO(
         String direccion
 ) {
      public EventoListarDTO(Evento evento) {
-          this(evento.getNombre(), evento.getDescripcion(), evento.getPoster(), evento.getImgLocalidades(),
+          this(evento.getId(), evento.getNombre(), evento.getDescripcion(), evento.getPoster(), evento.getImgLocalidades(),
                   formatFecha(evento.getFecha()), evento.getDireccion().getCiudad());
      }
 
