@@ -1,10 +1,13 @@
 package co.edu.uniquindio.unieventosbackend.exceptions;
 
 import co.edu.uniquindio.unieventosbackend.dto.respuesta.RespuestaDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 public class controladorExepciones {
@@ -14,12 +17,15 @@ public class controladorExepciones {
           return ResponseEntity.badRequest().body("Validación fallida: " + ex.getBindingResult().getAllErrors());
      }
 
-
-
      @ExceptionHandler(UsuarioExistenteException.class)
      public ResponseEntity<RespuestaDto> usuarioExistente(UsuarioExistenteException e) {
           return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
      }
 
+     @ExceptionHandler(AccessDeniedException.class)
+     public ResponseEntity<RespuestaDto> handleAccessDeniedException(AccessDeniedException ex) {
+          return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                  .body(new RespuestaDto("No tienes permiso para realizar esta acción.", true));
+     }
 
 }

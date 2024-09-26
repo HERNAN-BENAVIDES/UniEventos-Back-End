@@ -1,6 +1,8 @@
 package co.edu.uniquindio.unieventosbackend.config.security;
 
 import co.edu.uniquindio.unieventosbackend.services.CustomUserDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -41,6 +46,21 @@ public class SecurityConfig {
                           .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
                           .requestMatchers("/cliente/cuenta/**").authenticated()
                           .anyRequest().permitAll()
+                  )
+                  .exceptionHandling(ex -> ex
+                          .accessDeniedHandler((request, response, accessDeniedException) -> {
+                               response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                               response.setContentType("application/json"); // Establecer el tipo de contenido a JSON
+
+                               // Crear un objeto de respuesta
+                               Map<String, String> errorResponse = new HashMap<>();
+                               errorResponse.put("message", "Acceso denegado: No tienes permiso para realizar esta acción.");
+
+                               // Convertir el objeto a JSON y escribirlo en la respuesta
+                               ObjectMapper objectMapper = new ObjectMapper();
+                               response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+                               response.getWriter().flush();
+                          })
                   )
                   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
