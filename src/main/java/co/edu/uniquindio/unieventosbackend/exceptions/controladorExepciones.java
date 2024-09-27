@@ -28,4 +28,14 @@ public class controladorExepciones {
                   .body(new RespuestaDto("No tienes permiso para realizar esta acción.", true));
      }
 
+     @ExceptionHandler(EventoException.class)
+     public ResponseEntity<RespuestaDto> eventoException(EventoException e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
+     }
+
+     @ExceptionHandler(EventoNotFoundException.class)
+     public ResponseEntity<RespuestaDto> eventoNotFoundException(EventoNotFoundException e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
+     }
+
 }

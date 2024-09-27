@@ -1,6 +1,7 @@
-package co.edu.uniquindio.unieventosbackend.dto;
+package co.edu.uniquindio.unieventosbackend.dto.evento;
 
 import co.edu.uniquindio.unieventosbackend.model.documents.Evento;
+import co.edu.uniquindio.unieventosbackend.model.enums.TipoEvento;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -11,13 +12,14 @@ public record EventoListarDTO(
         String id,
         String nombre,
         String descripcion,
+        TipoEvento tipoEvento,
         String poster,
         String imgLocalidades,
         String fecha, // Aquí mantenemos el formato de fecha como String
         String direccion
 ) {
      public EventoListarDTO(Evento evento) {
-          this(evento.getId(), evento.getNombre(), evento.getDescripcion(), evento.getPoster(), evento.getImgLocalidades(),
+          this(evento.getId(), evento.getNombre(), evento.getDescripcion(), evento.getTipoEvento(), evento.getPoster(), evento.getImgLocalidades(),
                   formatFecha(evento.getFecha()), evento.getDireccion().getCiudad());
      }
 

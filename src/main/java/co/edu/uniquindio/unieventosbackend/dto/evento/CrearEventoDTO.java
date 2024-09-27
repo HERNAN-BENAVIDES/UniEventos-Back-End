@@ -13,6 +13,8 @@ public record CrearEventoDTO(
         @NotBlank
         String descripcion,
         @NotBlank
+        String tipoEvento,
+        @NotBlank
         String poster,
         @NotBlank
         String imgLocalidades,

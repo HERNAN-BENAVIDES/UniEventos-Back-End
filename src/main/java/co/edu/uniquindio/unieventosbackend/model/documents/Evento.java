@@ -3,10 +3,10 @@ package co.edu.uniquindio.unieventosbackend.model.documents;
 import co.edu.uniquindio.unieventosbackend.dto.direccion.CrearDireccionDTO;
 import co.edu.uniquindio.unieventosbackend.dto.evento.CrearEventoDTO;
 import co.edu.uniquindio.unieventosbackend.dto.localidad.CrearLocalidadDTO;
+import co.edu.uniquindio.unieventosbackend.model.enums.TipoEvento;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,6 +22,7 @@ public class Evento {
      private String id;
     private String nombre;
     private String descripcion;
+    private TipoEvento tipoEvento;
     private String poster;
     private String imgLocalidades;
     private Date fecha;
