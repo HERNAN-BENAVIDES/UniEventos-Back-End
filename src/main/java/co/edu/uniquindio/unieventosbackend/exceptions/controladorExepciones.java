@@ -38,4 +38,9 @@ public class controladorExepciones {
           return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
      }
 
+     @ExceptionHandler(FormatoFechaNoValido.class)
+     public ResponseEntity<RespuestaDto> formatoFechaNoValido(FormatoFechaNoValido e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
+     }
+
 }

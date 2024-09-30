@@ -6,6 +6,7 @@ import co.edu.uniquindio.unieventosbackend.dto.evento.CrearEventoDTO;
 import co.edu.uniquindio.unieventosbackend.dto.evento.FiltroEventosDTO;
 import co.edu.uniquindio.unieventosbackend.exceptions.EventoException;
 import co.edu.uniquindio.unieventosbackend.exceptions.EventoNotFoundException;
+import co.edu.uniquindio.unieventosbackend.exceptions.FormatoFechaNoValido;
 import co.edu.uniquindio.unieventosbackend.model.documents.Evento;
 import co.edu.uniquindio.unieventosbackend.model.enums.TipoEvento;
 import co.edu.uniquindio.unieventosbackend.services.EventoService;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.Optional;
-import java.util.logging.Filter;
+
 
 @RestController
 @RequestMapping("/uni-eventos")
@@ -31,7 +32,7 @@ public class EventoController {
 
 
      @GetMapping("/eventos")
-     public ResponseEntity<Page<EventoListarDTO>> obtenerEventosDisponibles(@PageableDefault(size =5) Pageable pageable, @RequestBody FiltroEventosDTO filtro) throws EventoNotFoundException {
+     public ResponseEntity<Page<EventoListarDTO>> obtenerEventosDisponibles(@PageableDefault(size =5) Pageable pageable, @RequestBody FiltroEventosDTO filtro) throws EventoNotFoundException, FormatoFechaNoValido {
           Page<Evento> eventos = eventoService.obtenerEventosDisponibles(pageable, filtro);
           Page<EventoListarDTO> eventosDTO = eventos.map(EventoListarDTO::new);
           return ResponseEntity.ok(eventosDTO);     }

@@ -3,6 +3,7 @@ package co.edu.uniquindio.unieventosbackend.services;
 import co.edu.uniquindio.unieventosbackend.dto.evento.FiltroEventosDTO;
 import co.edu.uniquindio.unieventosbackend.exceptions.EventoException;
 import co.edu.uniquindio.unieventosbackend.exceptions.EventoNotFoundException;
+import co.edu.uniquindio.unieventosbackend.exceptions.FormatoFechaNoValido;
 import co.edu.uniquindio.unieventosbackend.model.documents.Evento;
 import co.edu.uniquindio.unieventosbackend.model.enums.TipoEvento;
 import co.edu.uniquindio.unieventosbackend.repositories.EventoRepository;
@@ -11,7 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
+
 
 @Service
 public class EventoService {
@@ -26,7 +30,22 @@ public class EventoService {
           return eventoRepository.save(evento);
      }
 
-     public Page<Evento> obtenerEventosDisponibles(Pageable pageable, FiltroEventosDTO filtro) throws EventoNotFoundException {
+     public Page<Evento> obtenerEventosDisponibles(Pageable pageable, FiltroEventosDTO filtro) throws EventoNotFoundException, FormatoFechaNoValido {
+
+          Date inicioDelDia = null;
+          Date finDelDia = null;
+
+          if(filtro.fecha() != null){
+               try {
+                    LocalDate fechaSeleccionada = LocalDate.parse(filtro.fecha());
+
+                    // Definir el rango de búsqueda: desde el inicio del día hasta el final
+                    inicioDelDia = Date.from(fechaSeleccionada.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                     finDelDia = Date.from(fechaSeleccionada.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+               } catch (Exception e) {
+                    throw new FormatoFechaNoValido("Error al procesar la fecha: " + filtro.fecha());
+               }
+          }
 
           if (filtro.nombre() != null && filtro.ciudad() != null && filtro.tipoEvento() != null && filtro.fecha() != null) {
                return obtenerEventosPorNombreCiudadTipoYFecha(
@@ -34,7 +53,9 @@ public class EventoService {
                        filtro.nombre(),
                        filtro.ciudad(),
                        TipoEvento.valueOf(filtro.tipoEvento()),
-                       new Date(filtro.fecha())
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
                );
           } else if (filtro.nombre() != null && filtro.ciudad() != null && filtro.tipoEvento() != null) {
                return obtenerEventosPorNombreCiudadYTipo(
@@ -48,21 +69,27 @@ public class EventoService {
                        pageable,
                        filtro.nombre(),
                        filtro.ciudad(),
-                       new Date(filtro.fecha())
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
                );
           } else if (filtro.nombre() != null && filtro.tipoEvento() != null && filtro.fecha() != null) {
                return obtenerEventosPorNombreTipoYFecha(
                        pageable,
                        filtro.nombre(),
                        TipoEvento.valueOf(filtro.tipoEvento()),
-                       new Date(filtro.fecha())
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
                );
           } else if (filtro.ciudad() != null && filtro.tipoEvento() != null && filtro.fecha() != null) {
                return obtenerEventosPorCiudadTipoYFecha(
                        pageable,
                        filtro.ciudad(),
                        TipoEvento.valueOf(filtro.tipoEvento()),
-                       new Date(filtro.fecha())
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
                );
           } else if (filtro.nombre() != null && filtro.ciudad() != null) {
                return obtenerEventosPorNombreYCiudad(
@@ -79,8 +106,10 @@ public class EventoService {
           } else if (filtro.nombre() != null && filtro.fecha() != null) {
                return obtenerEventosPorNombreYFecha(
                        pageable,
-                       new Date(filtro.fecha()),
-                       filtro.nombre()
+                       filtro.nombre(),
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
                );
           } else if (filtro.ciudad() != null && filtro.tipoEvento() != null) {
                return obtenerEventosPorCiudadYTipo(
@@ -92,13 +121,17 @@ public class EventoService {
                return obtenerEventosPorCiudadYFecha(
                        pageable,
                        filtro.ciudad(),
-                       new Date(filtro.fecha())
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
                );
           } else if (filtro.tipoEvento() != null && filtro.fecha() != null) {
                return obtenerEventosPorTipoYFecha(
                        pageable,
                        TipoEvento.valueOf(filtro.tipoEvento()),
-                       new Date(filtro.fecha())
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
                );
           } else if (filtro.nombre() != null) {
                return obtenerEventosPorNombre(pageable, filtro.nombre());
@@ -107,7 +140,12 @@ public class EventoService {
           } else if (filtro.tipoEvento() != null) {
                return obtenerEventosPorTipo(pageable, TipoEvento.valueOf(filtro.tipoEvento()));
           } else if (filtro.fecha() != null) {
-               return obtenerEventosPorFecha(pageable, new Date(filtro.fecha()));
+               return obtenerEventosPorFecha(
+                       pageable,
+                       filtro.fecha(),
+                       inicioDelDia,
+                       finDelDia
+               );
           }
 
           // Si no se proporcionan filtros
@@ -176,8 +214,8 @@ public class EventoService {
           return eventos;
      }
 
-     public Page<Evento> obtenerEventosPorFecha(Pageable pageable, Date fecha) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByFechaGreaterThanEqual(pageable, fecha);
+     public Page<Evento> obtenerEventosPorFecha(Pageable pageable, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByFechaGreaterThanEqualAndFechaBetween(pageable, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos a partir de la fecha: " + fecha);
           }
@@ -204,8 +242,8 @@ public class EventoService {
 
      // Métodos adicionales para las combinaciones de filtros
 
-     public Page<Evento> obtenerEventosPorNombreYFecha(Pageable pageable, Date fecha, String nombre) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByNombreContainingAndFechaGreaterThanEqual(pageable, nombre, fecha);
+     public Page<Evento> obtenerEventosPorNombreYFecha(Pageable pageable, String nombre, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByNombreContainingAndFechaBetween(pageable, nombre, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos con el nombre: " + nombre + " a partir de la fecha: " + fecha);
           }
@@ -236,16 +274,16 @@ public class EventoService {
           return eventos;
      }
 
-     public Page<Evento> obtenerEventosPorCiudadYFecha(Pageable pageable, String ciudad, Date fecha) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByDireccionCiudadAndFechaGreaterThanEqual(pageable, ciudad, fecha);
+     public Page<Evento> obtenerEventosPorCiudadYFecha(Pageable pageable, String ciudad, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByDireccionCiudadAndFechaBetween(pageable, ciudad, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos en la ciudad: " + ciudad + " a partir de la fecha: " + fecha);
           }
           return eventos;
      }
 
-     public Page<Evento> obtenerEventosPorTipoYFecha(Pageable pageable, TipoEvento tipoEvento, Date fecha) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByTipoEventoAndFechaGreaterThanEqual(pageable, tipoEvento, fecha);
+     public Page<Evento> obtenerEventosPorTipoYFecha(Pageable pageable, TipoEvento tipoEvento, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByTipoEventoAndFechaBetween(pageable, tipoEvento, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos del tipo: " + tipoEvento + " a partir de la fecha: " + fecha);
           }
@@ -260,32 +298,32 @@ public class EventoService {
           return eventos;
      }
 
-     public Page<Evento> obtenerEventosPorNombreCiudadYFecha(Pageable pageable, String nombre, String ciudad, Date fecha) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByNombreContainingAndDireccionCiudadAndFechaGreaterThanEqual(pageable, nombre, ciudad, fecha);
+     public Page<Evento> obtenerEventosPorNombreCiudadYFecha(Pageable pageable, String nombre, String ciudad, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByNombreContainingAndDireccionCiudadAndFechaBetween(pageable, nombre, ciudad, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos con el nombre: " + nombre + " en la ciudad: " + ciudad + " a partir de la fecha: " + fecha);
           }
           return eventos;
      }
 
-     public Page<Evento> obtenerEventosPorNombreTipoYFecha(Pageable pageable, String nombre, TipoEvento tipoEvento, Date fecha) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByNombreContainingAndTipoEventoAndFechaGreaterThanEqual(pageable, nombre, tipoEvento, fecha);
+     public Page<Evento> obtenerEventosPorNombreTipoYFecha(Pageable pageable, String nombre, TipoEvento tipoEvento, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByNombreContainingAndTipoEventoAndFechaBetween(pageable, nombre, tipoEvento, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos con el nombre: " + nombre + " del tipo: " + tipoEvento + " a partir de la fecha: " + fecha);
           }
           return eventos;
      }
 
-     public Page<Evento> obtenerEventosPorCiudadTipoYFecha(Pageable pageable, String ciudad, TipoEvento tipoEvento, Date fecha) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByDireccionCiudadAndTipoEventoAndFechaGreaterThanEqual(pageable, ciudad, tipoEvento, fecha);
+     public Page<Evento> obtenerEventosPorCiudadTipoYFecha(Pageable pageable, String ciudad, TipoEvento tipoEvento, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByDireccionCiudadAndTipoEventoAndFechaBetween(pageable, ciudad, tipoEvento, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos en la ciudad: " + ciudad + " del tipo: " + tipoEvento + " a partir de la fecha: " + fecha);
           }
           return eventos;
      }
 
-     public Page<Evento> obtenerEventosPorNombreCiudadTipoYFecha(Pageable pageable, String nombre, String ciudad, TipoEvento tipoEvento, Date fecha) throws EventoNotFoundException {
-          Page<Evento> eventos = eventoRepository.findByNombreContainingAndDireccionCiudadAndTipoEventoAndFechaGreaterThanEqual(pageable, nombre, ciudad, tipoEvento, fecha);
+     public Page<Evento> obtenerEventosPorNombreCiudadTipoYFecha(Pageable pageable, String nombre, String ciudad, TipoEvento tipoEvento, String fecha, Date inicioDelDia, Date finDelDia) throws EventoNotFoundException {
+          Page<Evento> eventos = eventoRepository.findByNombreContainingAndDireccionCiudadAndTipoEventoAndFechaBetween(pageable, nombre, ciudad, tipoEvento, fecha, inicioDelDia, finDelDia);
           if (eventos.isEmpty()) {
                throw new EventoNotFoundException("No se encontraron eventos con el nombre: " + nombre + " en la ciudad: " + ciudad + " del tipo: " + tipoEvento + " a partir de la fecha: " + fecha);
           }
