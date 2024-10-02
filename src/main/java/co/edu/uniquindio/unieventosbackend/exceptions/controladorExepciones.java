@@ -43,4 +43,9 @@ public class controladorExepciones {
           return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
      }
 
+     @ExceptionHandler(ClienteNotFound.class)
+     public ResponseEntity<RespuestaDto> clienteNotFound(ClienteNotFound e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
+     }
+
 }
