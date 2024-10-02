@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class UsuarioService {
 
@@ -23,6 +25,28 @@ public class UsuarioService {
 
      public Boolean findByUsuario(Usuario usuario) {
           return usuarioRepository.findByUsername(usuario.getUsername()) != null;
+     }
+
+
+     //----------------------------- METODOS AGREGADOS -------------------------------------
+
+     // Método para autenticar un usuario
+     public Usuario autenticarUsuario(String username, String password) {
+          // Busca al usuario por su nombre de usuario
+          Usuario usuario = usuarioRepository.findByUsername(username);
+
+          // Verifica si el usuario fue encontrado
+          if (usuario == null) {
+               throw new NoSuchElementException("Usuario no encontrado");
+          }
+
+          // Verifica si la contraseña es correcta
+          if (!usuario.getPassword().equals(password)) {
+               throw new IllegalArgumentException("Contraseña incorrecta");
+          }
+
+          // Si el usuario existe y la contraseña es correcta, lo retorna
+          return usuario;
      }
 
 }
