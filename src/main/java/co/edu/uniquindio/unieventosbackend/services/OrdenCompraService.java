@@ -16,4 +16,8 @@ public class OrdenCompraService {
      public List<OrdenCompra> obtenerOrdenesByIdEvento(String id) {
           return ordenCompraRepository.findByEventoId(id);
      }
+
+     public List<OrdenCompra> obtenerOrdenes() {
+          return ordenCompraRepository.findAll();
+     }
 }

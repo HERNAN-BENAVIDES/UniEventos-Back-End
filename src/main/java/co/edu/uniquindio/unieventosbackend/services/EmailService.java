@@ -2,6 +2,7 @@ package co.edu.uniquindio.unieventosbackend.services;
 
 import co.edu.uniquindio.unieventosbackend.exceptions.UsuarioNotFoundException;
 import co.edu.uniquindio.unieventosbackend.model.documents.Evento;
+import co.edu.uniquindio.unieventosbackend.model.documents.Item;
 import co.edu.uniquindio.unieventosbackend.model.documents.OrdenCompra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -38,10 +39,15 @@ public class EmailService {
           for (Evento evento : eventos) {
                var id = evento.getId();
 
-               for (OrdenCompra ordenCompra : ordenCompraService.obtenerOrdenesByIdEvento(id)) {
-                    var idUsuario = ordenCompra.getIdUsuario();
-                    var destinatario = usuarioService.findById(idUsuario).getUsername();
-                    enviarCorreo(destinatario, evento);
+               for (OrdenCompra orden : ordenCompraService.obtenerOrdenes()) {
+                    List<Item> items = orden.getListaItems();
+                    for (Item item : items) {
+                         if (item.getIdEvento().equals(id)) {
+                              var idUsuario = orden.getIdUsuario();
+                              var destinatario = usuarioService.findById(idUsuario).getUsername();
+                              enviarCorreo(destinatario, evento);
+                         }
+                    }
                }
           }
      }
