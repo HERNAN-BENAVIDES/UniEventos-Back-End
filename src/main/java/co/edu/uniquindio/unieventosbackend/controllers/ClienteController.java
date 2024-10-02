@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -58,13 +59,23 @@ public class ClienteController {
      }
 
      // 2. Agregar Producto al Carrito
-     @PostMapping("/{clienteId}/carrito/agregar")
-     public ResponseEntity<?> agregarProductoCarrito(@PathVariable String clienteId, @RequestParam String productoId) {
+     @PostMapping("/{clienteId}/carrito")
+     public ResponseEntity<Cliente> agregarProductoCarrito(
+             @PathVariable String clienteId,
+             @RequestParam String eventoId,
+             @RequestParam String localidadId,
+             @RequestParam int cantidad) {
+
           try {
-               Cliente cliente = clienteService.agregarProductoCarrito(clienteId, productoId);
-               return ResponseEntity.ok(cliente.getCarrito());
+               // Llama al servicio para agregar el producto al carrito
+               Cliente clienteActualizado = clienteService.agregarProductoCarrito(clienteId, eventoId, localidadId, cantidad);
+               return ResponseEntity.ok(clienteActualizado);
           } catch (NoSuchElementException e) {
-               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
+               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+          } catch (IllegalArgumentException e) {
+               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+          } catch (Exception e) {
+               return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
           }
      }
 
@@ -83,7 +94,7 @@ public class ClienteController {
      @PostMapping("/{clienteId}/carrito/pagar")
      public ResponseEntity<?> pagarCarrito(@PathVariable String clienteId) {
           try {
-               String resultado = clienteService.pagarCarrito(clienteId);
+                    String resultado = clienteService.pagarCarrito(clienteId);
                return ResponseEntity.ok(resultado);
           } catch (NoSuchElementException e) {
                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
@@ -122,4 +133,5 @@ public class ClienteController {
                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
           }
      }
+
 }
