@@ -5,9 +5,11 @@ import co.edu.uniquindio.unieventosbackend.dto.cliente.ClienteRegistroDto;
 import co.edu.uniquindio.unieventosbackend.dto.jwt.JWTDto;
 import co.edu.uniquindio.unieventosbackend.dto.respuesta.RespuestaDto;
 import co.edu.uniquindio.unieventosbackend.dto.usuario.UsuarioAutenticacionDto;
+import co.edu.uniquindio.unieventosbackend.exceptions.AdministradorNotFound;
 import co.edu.uniquindio.unieventosbackend.exceptions.ClienteNotFound;
 import co.edu.uniquindio.unieventosbackend.exceptions.UsuarioExistenteException;
 import co.edu.uniquindio.unieventosbackend.model.documents.Cliente;
+import co.edu.uniquindio.unieventosbackend.services.AdministradorService;
 import co.edu.uniquindio.unieventosbackend.services.ClienteService;
 import co.edu.uniquindio.unieventosbackend.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class AuthController {
 
      @Autowired
      private ClienteService clienteService;
+     @Autowired
+     private AdministradorService administradorService;
 
      @Autowired
      public AuthController(AuthenticationManager authenticationManager,
@@ -45,7 +49,7 @@ public class AuthController {
      }
 
      @PostMapping("/login")
-     public ResponseEntity<?> login(@RequestBody UsuarioAutenticacionDto request) {
+     public ResponseEntity<?> login(@RequestBody UsuarioAutenticacionDto request) throws AdministradorNotFound {
           try {
                // Autenticación del usuario
                authenticationManager.authenticate(
@@ -57,7 +61,11 @@ public class AuthController {
                // Generar el token
                final String jwt = jwtUtil.generateToken(userDetails);
 
-               return ResponseEntity.ok(new JWTDto(jwt, clienteService.getClienteByIdUser(userDetails.getUsername())));
+               if (userDetails.getAuthorities().equals("ROLE_CLIENTE")) {
+                    return ResponseEntity.ok(new JWTDto(jwt, clienteService.getClienteByIdUser(userDetails.getUsername())));
+               }
+               
+               return ResponseEntity.ok(new JWTDto(jwt, administradorService.getAdministradorByIdUser(userDetails.getUsername())));
           } catch (BadCredentialsException e) {
                return ResponseEntity.status(HttpStatus.FORBIDDEN)
                        .body("Credenciales incorrectas. Por favor, verifica e intenta nuevamente.");

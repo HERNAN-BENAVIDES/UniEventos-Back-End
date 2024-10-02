@@ -1,10 +1,10 @@
 package co.edu.uniquindio.unieventosbackend.model.documents;
 
 import co.edu.uniquindio.unieventosbackend.dto.cliente.ClienteRegistroDto;
+import co.edu.uniquindio.unieventosbackend.model.documents.interfaces.Persona;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @SuppressWarnings("ALL")
 @Document(collection = "clientes")
-public class Cliente {
+public class Cliente implements Persona {
     @Id
     private String id;
     private String cedula;

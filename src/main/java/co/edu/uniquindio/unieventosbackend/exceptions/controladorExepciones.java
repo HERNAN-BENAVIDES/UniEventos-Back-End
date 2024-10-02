@@ -48,4 +48,9 @@ public class controladorExepciones {
           return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
      }
 
+     @ExceptionHandler(AdministradorNotFound.class)
+     public ResponseEntity<RespuestaDto> administradorNotFound(AdministradorNotFound e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
+     }
+
 }

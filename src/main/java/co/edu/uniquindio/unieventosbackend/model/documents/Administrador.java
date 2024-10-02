@@ -1,9 +1,9 @@
 package co.edu.uniquindio.unieventosbackend.model.documents;
 
+import co.edu.uniquindio.unieventosbackend.model.documents.interfaces.Persona;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @SuppressWarnings("ALL")
 @Document(collection = "administradores")
-public class Administrador {
+public class Administrador implements Persona {
     @Id
     private String id;
     private String cedula;
