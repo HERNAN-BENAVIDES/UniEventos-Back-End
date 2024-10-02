@@ -31,7 +31,6 @@ public class ClienteService {
      @Autowired
      private UsuarioRepository usuarioRepository;
 
-     ;
      public Cliente crearUsuario(Cliente cliente) throws UsuarioExistenteException {
           Usuario usuario = cliente.getUsuario();
           Boolean user = usuarioService.findByUsuario(usuario);
@@ -141,19 +140,19 @@ public class ClienteService {
           return "Pago procesado correctamente. Código de orden: " + codigoOrden;
      }
 
-     private String processPayment(Double total) {
-          // Lógica de integración con la pasarela de pago (mock)
-          return "TRANS123456"; // Retorno simulado de un ID de transacción
-     }
-
-     private String registrarOrdenCompra(Cliente cliente) {
-          // Aquí se generaría la lógica para registrar la orden de compra y
-          // actualizar la lista de idOrdenesCompra del cliente.
-          String ordenCompraId = "ORDEN" + System.currentTimeMillis(); // Generación de ID simple
-          cliente.getIdOrdenesCompra().add(ordenCompraId);
-          // Se asume que también hay una entidad de Orden de Compra que se guardaría
-          return ordenCompraId;
-     }
+//     private String processPayment(Double total) {
+//          // Lógica de integración con la pasarela de pago (mock)
+//          return "TRANS123456"; // Retorno simulado de un ID de transacción
+//     }
+//
+//     private String registrarOrdenCompra(Cliente cliente) {
+//          // Aquí se generaría la lógica para registrar la orden de compra y
+//          // actualizar la lista de idOrdenesCompra del cliente.
+//          String ordenCompraId = "ORDEN" + System.currentTimeMillis(); // Generación de ID simple
+//          cliente.getIdOrdenesCompra().add(ordenCompraId);
+//          // Se asume que también hay una entidad de Orden de Compra que se guardaría
+//          return ordenCompraId;
+//     }
 
      public Cliente editarDatos(String clienteId, Cliente datosActualizados) {
           // Busca al cliente por ID
