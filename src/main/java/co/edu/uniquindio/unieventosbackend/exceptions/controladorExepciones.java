@@ -53,4 +53,14 @@ public class controladorExepciones {
           return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
      }
 
+     @ExceptionHandler(UsuarioNotFoundException.class)
+     public ResponseEntity<RespuestaDto> usuarioNotFound(UsuarioNotFoundException e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
+     }
+
+     @ExceptionHandler(EmailSenderException.class)
+     public ResponseEntity<RespuestaDto> emailSenderException(EmailSenderException e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto("Error al enviar correos \n" + e.getMessage(), true));
+     }
+
 }

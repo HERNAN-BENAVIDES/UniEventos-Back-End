@@ -66,7 +66,7 @@ public class EventoController {
           return ResponseEntity.ok().build();
      }
 
-     @PostMapping("/eventos/actualizar/{id}")
+     @PutMapping("/eventos/actualizar/{id}")
      @PreAuthorize("hasRole('ADMINISTRADOR')")
      public ResponseEntity<?> actualizarEvento(@PathVariable String id, @Valid @RequestBody CrearEventoDTO evento) throws EventoException, EventoNotFoundException {
           return ResponseEntity.ok(eventoService.actualizarEvento(id, new Evento(evento)));

@@ -43,6 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
           if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                jwt = authorizationHeader.substring(7);
 
+
                // Verificar si el token es inválido
                if (tokenService.isTokenInvalid(jwt)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

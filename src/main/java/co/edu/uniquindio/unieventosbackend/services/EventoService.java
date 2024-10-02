@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -330,4 +331,17 @@ public class EventoService {
           return eventos;
      }
 
+     public List<Evento> obtenerEventosProximos() {
+          // Obtener la fecha de hoy
+          LocalDate hoy = LocalDate.now();
+
+          LocalDate inicio = hoy.plusWeeks(1);
+          LocalDate fin = hoy.plusWeeks(2);
+
+          // Convertir a Date
+          Date inicio1 = Date.from(inicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
+          Date fin2 = Date.from(fin.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+          return eventoRepository.findByFechaBetween(inicio1, fin2);
+     }
 }

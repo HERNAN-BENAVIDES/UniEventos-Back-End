@@ -29,30 +29,64 @@ ext {
 }
 
 dependencies {
+    // Actuator para monitoreo y gestión de la aplicación
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Soporte para acceso a bases de datos MongoDB
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // Soporte para el envío de correos electrónicos
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Soporte para HATEOAS (Hypermedia as the Engine of Application State)
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
+    // Implementación de OAuth2 (comentada)
+    // implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // Biblioteca para creación de PDFs
+    implementation 'com.itextpdf:itextpdf:5.5.13.4'
+
+    // Soporte para programación de tareas (cron)
+    implementation 'org.quartz-scheduler:quartz:2.5.0-rc1'
+
+    // Soporte para validación de datos
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // Soporte para la seguridad de la aplicación
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Soporte para desarrollo web (REST APIs)
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Configuración de seguridad (Spring Security)
     implementation 'org.springframework.security:spring-security-config'
     implementation 'org.springframework.security:spring-security-web'
+
+    // Pruebas de seguridad (Spring Security)
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // Biblioteca para manejo de JWT (JSON Web Tokens)
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    //implementation 'com.google.cloud:spring-cloud-gcp-starter-storage'
+    // Comentada: Soporte para Google Cloud Storage
+    // implementation 'com.google.cloud:spring-cloud-gcp-starter-storage'
+
+    // Lombok para reducción de código boilerplate (solo durante la compilación)
     compileOnly 'org.projectlombok:lombok'
+
+    // DevTools para mejorar la experiencia de desarrollo
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Procesador de anotaciones para Lombok
     annotationProcessor 'org.projectlombok:lombok'
+
+    // Soporte para pruebas unitarias
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+
+    // Soporte para el lanzador de la plataforma JUnit
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

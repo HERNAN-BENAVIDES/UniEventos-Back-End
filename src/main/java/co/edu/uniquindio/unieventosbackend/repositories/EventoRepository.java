@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public interface EventoRepository extends MongoRepository<Evento, String> {
@@ -43,7 +44,7 @@ public interface EventoRepository extends MongoRepository<Evento, String> {
      @Query("{ 'direccion.ciudad': ?0, 'fecha': { $gte: ?2, $lte: ?3 } }")
      Page<Evento> findByDireccionCiudadAndFechaBetween(Pageable pageable, String ciudad, String fecha, Date inicioDelDia, Date finDelDia);
 
-     @Query("{ 'tipoEvento': ?0, 'fecha': { $gte: ?2, $lte: ?3 } }")
+     @Query("{ 'tipoEvento': ?0, 'fecha': { $gte: ?2, $Ite: ?3 } }")
      Page<Evento> findByTipoEventoAndFechaBetween(Pageable pageable, TipoEvento tipoEvento, String fecha, Date inicioDelDia, Date finDelDia);
 
      @Query("{ 'nombre': { $regex: ?0, $options: 'i' }, 'direccion.ciudad': ?1, 'tipoEvento': ?2 }")
@@ -60,4 +61,8 @@ public interface EventoRepository extends MongoRepository<Evento, String> {
 
      @Query("{ 'nombre': { $regex: ?0, $options: 'i' }, 'direccion.ciudad': ?1, 'tipoEvento': ?2, 'fecha': { $gte: ?4, $lte: ?5 } }")
      Page<Evento> findByNombreContainingAndDireccionCiudadAndTipoEventoAndFechaBetween(Pageable pageable, String nombre, String ciudad, TipoEvento tipoEvento, String fecha, Date inicioDelDia, Date finDelDia);
+
+     @Query("{ 'fecha': { $gte: ?0, $lte: ?1 } }")
+     List<Evento> findByFechaBetween(Date inicio, Date fin);
+
 }
