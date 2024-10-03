@@ -61,10 +61,14 @@ public class AuthController {
                // Generar el token
                final String jwt = jwtUtil.generateToken(userDetails);
 
-               if (userDetails.getAuthorities().equals("ROLE_CLIENTE")) {
+               // Verificar el rol del usuario
+               boolean isCliente = userDetails.getAuthorities().stream()
+                       .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_CLIENTE"));
+
+               if (isCliente) {
+                    System.out.println("Cliente");
                     return ResponseEntity.ok(new JWTDto(jwt, clienteService.getClienteByIdUser(userDetails.getUsername())));
                }
-               
                return ResponseEntity.ok(new JWTDto(jwt, administradorService.getAdministradorByIdUser(userDetails.getUsername())));
           } catch (BadCredentialsException e) {
                return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -82,11 +86,6 @@ public class AuthController {
           String jwtToken = token.substring(7);
           tokenService.invalidateToken(jwtToken);
           return ResponseEntity.ok(new RespuestaDto("Sesión cerrada)", true));
-     }
-
-     @PostMapping("register")
-     public ResponseEntity<?> register(@RequestBody ClienteRegistroDto request) throws UsuarioExistenteException {
-          return ResponseEntity.ok(clienteService.crearUsuario(new Cliente(request)));
      }
 
 }
