@@ -1,5 +1,8 @@
 package co.edu.uniquindio.unieventosbackend.model.documents;
 
+import co.edu.uniquindio.unieventosbackend.dto.cupon.CrearCuponDto;
+import co.edu.uniquindio.unieventosbackend.model.enums.EstadoCupon;
+import co.edu.uniquindio.unieventosbackend.model.enums.TipoCupon;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,21 +21,38 @@ public class Cupon {
     private String id;
     private String codigo;
     private String nombre;
-    private Double porcentajeDescuento;
-    private Date fechaVencimiento;
-    private int cantidadRedenciones;
-    private int redencionesActuales;
+    private String descripcion;
+    private Double descuento;
+    private Date fechaInicio;
+    private Date fechaFin;
     private Double montoMinimoCompra;
+    private EstadoCupon estado;
+    private TipoCupon tipo;
 
     @Builder
-    public Cupon(String codigo, String nombre, Double porcentajeDescuento, Date fechaVencimiento,
-                 int cantidadRedenciones, int redencionesActuales, Double montoMinimoCompra) {
+    public Cupon(String codigo, String nombre, String descripcion,
+                 Double descuento, Date fechaInicio, Date fechaFin, Double montoMinimoCompra,
+                 EstadoCupon estado, TipoCupon tipo) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.porcentajeDescuento = porcentajeDescuento;
-        this.fechaVencimiento = fechaVencimiento;
-        this.cantidadRedenciones = cantidadRedenciones;
-        this.redencionesActuales = redencionesActuales;
+        this.descripcion = descripcion;
+        this.descuento = descuento;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
         this.montoMinimoCompra = montoMinimoCompra;
+        this.estado = estado;
+        this.tipo = tipo;
+    }
+
+    public Cupon(CrearCuponDto cupon) {
+            this.codigo = cupon.codigo();
+            this.nombre = cupon.nombre();
+            this.descripcion = cupon.descripcion();
+            this.descuento = cupon.descuento();
+            this.fechaInicio = cupon.fechaInicio();
+            this.fechaFin = cupon.fechaFin();
+            this.montoMinimoCompra = cupon.montoMinimoCompra();
+            this.estado = cupon.estado();
+            this.tipo = cupon.tipo();
     }
 }
