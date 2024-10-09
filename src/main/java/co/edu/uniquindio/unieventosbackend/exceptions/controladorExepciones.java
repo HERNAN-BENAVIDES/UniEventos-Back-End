@@ -63,4 +63,9 @@ public class controladorExepciones {
           return ResponseEntity.badRequest().body(new RespuestaDto("Error al enviar correos \n" + e.getMessage(), true));
      }
 
+     @ExceptionHandler(CuponExistenteException.class)
+     public ResponseEntity<RespuestaDto> cuponExistenteException(CuponExistenteException e) {
+          return ResponseEntity.badRequest().body(new RespuestaDto(e.getMessage(), true));
+     }
+
 }

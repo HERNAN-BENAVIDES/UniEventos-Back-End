@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unieventosbackend.model.documents;
 
+import co.edu.uniquindio.unieventosbackend.model.enums.EstadoPago;
 import co.edu.uniquindio.unieventosbackend.model.enums.MetodoPago;
 import lombok.Builder;
 import lombok.Data;
@@ -8,19 +9,24 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
-@Document(collection = "pagos")
 @SuppressWarnings("ALL")
 public class Pago {
     @Id
-    private ObjectId idPago;
-    private String idOrdenCompra;
+    private String id;
+    private Date fecha;
+    private EstadoPago estado;
+    private Double monto;
     private MetodoPago metodoPago;
 
     @Builder
-    public Pago(String idOrdenCompra,MetodoPago metodoPago) {
-        this.idOrdenCompra = idOrdenCompra;
+    public Pago(Double monto, MetodoPago metodoPago) {
+        this.fecha = new Date();
+        this.estado = EstadoPago.PENDIENTE;
+        this.monto = monto;
         this.metodoPago = metodoPago;
     }
 }

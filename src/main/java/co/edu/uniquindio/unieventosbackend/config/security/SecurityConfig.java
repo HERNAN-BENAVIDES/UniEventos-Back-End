@@ -43,7 +43,8 @@ public class SecurityConfig {
                           .requestMatchers("/uni-eventos/auth/logout").authenticated() // Solo usuarios autenticados pueden cerrar sesión
                           .requestMatchers("/uni-eventos/auth/register").permitAll() // Permitir acceso al registro
                           .requestMatchers("/uni-eventos/eventos/crear").hasRole("ADMINISTRADOR")
-                          .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
+                          .requestMatchers("/uni-eventos/eventos/eliminar").hasRole("ADMINISTRADOR")
+                          .requestMatchers("/uni-eventos/cupones/crear").hasRole("ADMINISTRADOR")
                           .requestMatchers("/cliente/cuenta/**").authenticated()
                           .anyRequest().permitAll()
                   )
