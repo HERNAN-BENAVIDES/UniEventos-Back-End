@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface EventoRepository extends MongoRepository<Evento, String> {
 
-     Optional<Page<Evento>> findByIsActivoTrue(Pageable pageable);;
+     Optional<Page<Evento>> findByIsActivoTrue(Pageable pageable);
 
      // Búsquedas individuales
      @Query("{ 'nombre': { $regex: ?0, $options: 'i' } }")

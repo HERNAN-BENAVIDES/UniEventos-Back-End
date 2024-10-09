@@ -25,7 +25,7 @@ public class controladorExepciones {
      @ExceptionHandler(AccessDeniedException.class)
      public ResponseEntity<RespuestaDto> handleAccessDeniedException(AccessDeniedException ex) {
           return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                  .body(new RespuestaDto("No tienes permiso para realizar esta acción.", true));
+                  .body(new RespuestaDto("No tienes permiso para realizar esta acción. " + ex.getMessage(), true));
      }
 
      @ExceptionHandler(EventoException.class)

@@ -39,7 +39,7 @@ dependencies {
 
     //Mercado Pago 2.1.29
     //implementation 'com.mercadopago:mp-sdk-java:2.1.29'
-    implementation group: 'com.mercadopago', name: 'sdk-java', version: '2.1.29'
+    //implementation group: 'com.mercadopago', name: 'sdk-java', version: '2.1.29'
 
     // Actuator para monitoreo y gestión de la aplicación
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
