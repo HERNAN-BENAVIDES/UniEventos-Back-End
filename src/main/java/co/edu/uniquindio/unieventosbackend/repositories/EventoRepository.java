@@ -64,5 +64,4 @@ public interface EventoRepository extends MongoRepository<Evento, String> {
 
      @Query("{ 'fecha': { $gte: ?0, $lte: ?1 } }")
      List<Evento> findByFechaBetween(Date inicio, Date fin);
-
 }
